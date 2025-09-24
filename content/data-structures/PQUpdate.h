@@ -5,6 +5,7 @@
  * Source: based on https://codeforces.com/blog/entry/111117
  * Description: T: value/update type. DS: Stores T.
  * Same semantics as std::priority\_queue.
+ * Allows applying update with priority p, undoing lowest priority update, querying DS.
  * Time: O(U \log N).
  */
 #pragma once
