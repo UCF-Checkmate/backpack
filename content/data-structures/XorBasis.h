@@ -4,22 +4,23 @@
  * Source: Tyler Marks
  * Description: Forms a basis of binary vectors, with buildback.
  * Time: O(MAXBIT^2 / 32)
- * Status: Probably works lol
+ * Status: Tested (sans buildback)
  */
 #pragma once
 
-const int MAXBIT = 30;
+const int MAXBIT = 64;
 using B = bitset<MAXBIT>;
+
 template<class T> struct Basis {
     B basis[MAXBIT], which[MAXBIT];
-    T vals[MAXBIT];
+    optional<T> vals[MAXBIT];
     Basis() { memset(vals, 0, sizeof(vals)); }
 
     bool put(B v, T x) {
-        if(v.none()) return false;
+        if (v.none()) return false;
         B cur; int ind = -1;
-        for (int i = 0; i < p; i++) if (x[i]) {
-            if(vals[i])
+        for (int i = 0; i < MAXBIT; i++) if (v[i]) {
+            if(vals[i].has_value())
                 v ^= basis[i], cur ^= which[i];
             else if (ind < 0) ind = i;
         }
@@ -32,7 +33,7 @@ template<class T> struct Basis {
     B get(B v) {
         if (v.none()) return v;
         B res;
-        for (int i = 0; i < p; i++) if (v[i]) {
+        for (int i = 0; i < MAXBIT; i++) if (v[i]) {
             v ^= basis[i], res ^= which[i];
         }
         return res;
