@@ -10,7 +10,6 @@
 
 const int MAXBIT = 30;
 using B = bitset<MAXBIT>;
-
 template<class T> struct Basis {
     B basis[MAXBIT], which[MAXBIT];
     T vals[MAXBIT];
@@ -18,15 +17,13 @@ template<class T> struct Basis {
 
     bool put(B v, T x) {
         if(v.none()) return false;
-        B cur;
-        int ind = -1;
+        B cur; int ind = -1;
         for (int i = 0; i < p; i++) if (x[i]) {
             if(vals[i])
                 v ^= basis[i], cur ^= which[i];
             else if (ind < 0) ind = i;
         }
         if (ind < 0) return false;
-
         basis[ind] = v, vals[ind] = x;
         which[ind] = cur, which[ind][ind] = 1;
         return true;
@@ -36,7 +33,6 @@ template<class T> struct Basis {
         if (v.none()) return v;
         B res;
         for (int i = 0; i < p; i++) if (v[i]) {
-            assert(basis[i][i]);
             v ^= basis[i], res ^= which[i];
         }
         return res;
