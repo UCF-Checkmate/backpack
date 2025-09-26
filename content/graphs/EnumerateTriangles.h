@@ -5,7 +5,7 @@
  * Source: https://github.com/programming-team-code/programming_team_code/blob/main/graphs/uncommon/enumerate_triangles.hpp
  * Description: Runs a callback on all triangles in an undirected graph.
  * Usage:
- *  enumerate_triangles(edges, n, [&](int u, int v, int w) {
+ *  enumerate_triangles(edges, n, [\&](int u, int v, int w) {
  *    ...
  *  });
  * Time: O(V + E ^ (3/2))
