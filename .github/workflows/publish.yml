@@ -23,7 +23,7 @@ jobs:
         fetch-depth: 0
 
     - name: Install pdflatex
-      run: sudo apt-get install texlive-latex-base texlive-latex-recommended texlive-latex-extra
+      run: sudo apt-get update && sudo apt-get install texlive-latex-base texlive-latex-recommended texlive-latex-extra
 
     # We're going to rename the old `latest` release/tag to its creation date.
     # First we retrieve that creation date here if possible
