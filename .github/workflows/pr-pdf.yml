@@ -1,0 +1,43 @@
+# Author: enwask
+# This workflow builds the PDF for pull requests and comments a link to the artifact on the PR.
+name: Build PDF on PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pdflatex
+        run: sudo apt-get update && sudo apt-get install texlive-latex-base texlive-latex-recommended texlive-latex-extra
+
+      - name: Build PDF
+        run: make hackpack
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hackpack-pdf
+          path: hackpack.pdf
+
+      - name: Comment PDF link on PR
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.WORKFLOW_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const runId = context.runId;
+            const artifactUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}`;
+            const body = `✅ PDF built for this PR! [Download hackpack.pdf from workflow artifacts](${artifactUrl})`;
+            github.rest.issues.createComment({
+              issue_number: pr.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
