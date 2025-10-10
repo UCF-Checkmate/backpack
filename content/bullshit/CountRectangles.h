@@ -14,7 +14,7 @@ vvi count_rectangles(vvi &grid) {
 	vi col(m); // free space in column
 	rep(r, 0, n) {
 		rep(c, 0, m)
-			if(grid[r][c]) col[c] = 0;
+			if (grid[r][c]) col[c] = 0;
 			else col[c]++;
 		vi pre(m, -1), nex(m, m); // nearest < on left, <= on right
 		rep(c, 0, m) {
@@ -28,14 +28,12 @@ vvi count_rectangles(vvi &grid) {
 		rep(c, 0, m) {
 			int left = c - pre[c] - 1, right = nex[c] - c - 1;
 			ans[col[c]][left + right + 1]++;
-			ans[col[c]][left]--;
-			ans[col[c]][right]--;
+			ans[col[c]][left]--, ans[col[c]][right]--;
 		}
 	}
-	rep(i, 1, n+1)
-		rep(t, 0, 2)
+	rep(i, 1, n+1) rep(t, 0, 2)
 			for(int j = m-1; j; j--) ans[i][j] += ans[i][j+1];
 	rep(j, 1, m+1)
-		for(int i = n-1; i; i--) ans[i][j] += ans[i+1][j];
+		for (int i = n-1; i; i--) ans[i][j] += ans[i+1][j];
 	return ans;
 }
