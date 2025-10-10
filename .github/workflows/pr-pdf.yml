@@ -29,7 +29,7 @@ jobs:
       - name: Comment PDF link on PR
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.WORKFLOW_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const pr = context.payload.pull_request;
             const runId = context.runId;
