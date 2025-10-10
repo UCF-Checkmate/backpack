@@ -8,8 +8,8 @@
  *  enumerate_triangles(edges, n, [\&](int u, int v, int w) {
  *    ...
  *  });
- * Time: O(V + E ^ (3/2))
- * Status: ?
+ * Time: O(V + E^{3/2})
+ * Status: unknown
  */
 void enumerate_triangles(
   const vector<pair<int, int>>& edges, int n, auto f) {
