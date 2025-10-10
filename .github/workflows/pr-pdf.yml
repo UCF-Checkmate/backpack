@@ -20,22 +20,41 @@ jobs:
       - name: Build PDF
         run: make hackpack
 
-      - name: Upload PDF artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: hackpack.pdf
-          path: hackpack.pdf
 
-      - name: Comment PDF link on PR
+      - name: Upload PDF to 0x0.st
+        id: upload_pdf
+        run: |
+          url=$(curl -F "file=@hackpack.pdf" https://0x0.st)
+          echo "pdf_url=$url" >> $GITHUB_OUTPUT
+
+      - name: Delete old PDF comment and post new one
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const pr = context.payload.pull_request;
-            const runId = context.runId;
-            const artifactUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}`;
-            const body = `✅ PDF built for this PR! [Download hackpack.pdf from workflow artifacts](${artifactUrl})`;
-            github.rest.issues.createComment({
+            const pdfUrl = process.env.PDF_URL || '${{ steps.upload_pdf.outputs.pdf_url }}';
+            const body = `✅ PDF built for this PR! [View hackpack.pdf](${pdfUrl})`;
+
+            // Find previous bot comments with the same text pattern
+            const comments = await github.rest.issues.listComments({
+              issue_number: pr.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            for (const comment of comments.data) {
+              if (comment.body && comment.body.includes('✅ PDF built for this PR!')) {
+                await github.rest.issues.deleteComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: comment.id
+                });
+              }
+            }
+
+            // Post new comment
+            await github.rest.issues.createComment({
               issue_number: pr.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
