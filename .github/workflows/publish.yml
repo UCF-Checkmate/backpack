@@ -7,7 +7,12 @@ on:
   workflow_dispatch:
   push:
     branches:
-        - main
+      - main
+    paths:
+      - 'Makefile'
+      - 'doc/**'
+      - 'content/**'
+      - '.github/workflows/publish.yml'
 
 jobs:
   build-publish-pdf:
