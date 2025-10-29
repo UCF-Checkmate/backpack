@@ -1,6 +1,6 @@
 /**
  * Author: Tyler Marks (based on UCF PT)
- * Description: Builds a dominator tree on a directed graph. Output tree is a parent array with $src$ as the root.
+ * Description: Builds a dominator tree on a directed graph. Output tree is a parent array with $src$ as the root. The parent of $src$ is $-1$.
  * Time: O(V+E)
  * Status: Untested
  */
@@ -28,7 +28,7 @@ vi getDomTree(vvi &adj, int src) {
 		if(par[x] != x) {
 			int t = get(par[x], get);
 			par[x] = par[par[x]];
-			if(sdom[t] < sdom[best[x]]) best[x] = t;  
+			if(sdom[t] < sdom[best[x]]) best[x] = t;
 		}
 		return best[x];
 	};
@@ -49,6 +49,7 @@ vi getDomTree(vvi &adj, int src) {
 		if(idom[i] != sdom[i]) idom[i] = idom[idom[i]];
 		dom[revLabel[i]] = revLabel[idom[i]];
 	}
+    dom[src] = -1;
 
 	return dom;
 }
