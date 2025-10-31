@@ -2,9 +2,11 @@
  * Author: Nic Washbourne
  * Date: 2025-09-26
  * Source: Tyler Marks
- * Description: Forms a basis of binary vectors, with buildback.
+ * Description: Forms a basis of binary vectors, with buildback. get() returns a list of the
+ * input values associated with vectors that XOR to v. If v is not in the span, or is the zero
+ * vector, an empty vector is returned.
  * Time: O(MAXBIT^2 / 32)
- * Status: Tested (sans buildback)
+ * Status: Tested on https://codeforces.com/gym/105789/problem/B
  */
 #pragma once
 
@@ -16,7 +18,7 @@ template<class T> struct Basis {
     optional<T> vals[MAXBIT];
     Basis() { memset(vals, 0, sizeof(vals)); }
 
-    bool put(B v, T x) {
+    bool add(B v, T x) {
         if (v.none()) return false;
         B cur; int ind = -1;
         for (int i = 0; i < MAXBIT; i++) if (v[i]) {
@@ -30,12 +32,16 @@ template<class T> struct Basis {
         return true;
     }
 
-    B get(B v) {
-        if (v.none()) return v;
-        B res;
-        for (int i = 0; i < MAXBIT; i++) if (v[i]) {
-            v ^= basis[i], res ^= which[i];
-        }
+    vector<T> get(B v) const {
+        if (v.none()) return {{}};
+        B w;
+        for (int i = 0; i < MAXBIT; i++) if (v[i])
+            v ^= basis[i], w ^= which[i];
+        if (v.any()) return {};
+
+        vector<T> res;
+        for (int i = 0; i < MAXBIT; i++)
+            if (w[i]) res.push_back(*vals[i]);
         return res;
     }
 };
