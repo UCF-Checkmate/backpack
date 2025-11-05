@@ -33,21 +33,18 @@ pair<node*, node*> split(node *cur, int v) {
 		auto [L, R] = split(cur->right, v - getSz(cur->left) - 1);
 		left->right = L, right = R;
 		recalc(left);
-	} 
+	}
 	return {left, right};
 }
 
 node* merge(node *t1, node *t2) {
 	if(!t1 || !t2) return t1 ? t1 : t2;
 	node *res;
-	if(t1->prior > t2->prior) {
-		res = t1;
+	if(t1->prior > t2->prior)
+		res = t1,
 		res->right = merge(t1->right, t2);
-	}
-	else {
-		res = t2;
+	else
+		res = t2,
 		res->left = merge(t1, t2->left);
-	}
-	recalc(res);
-	return res;
+	return recalc(res), res;
 }
