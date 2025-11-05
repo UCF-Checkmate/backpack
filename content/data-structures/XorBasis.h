@@ -17,29 +17,24 @@ template<class T> struct Basis {
 	B basis[M], which[M];
 	optional<T> vals[M];
 	Basis() { memset(vals, 0, sizeof(vals)); }
-
 	bool add(B v, T x) {
 		if (v.none()) return false;
-		B cur;
-		int ind = -1;
-		for (int i = 0; i < M; i++)
-			if (v[i]) {
-				if (vals[i].has_value())
-					v ^= basis[i], cur ^= which[i];
-				else if (ind < 0) ind = i;
-			}
+		B cur; int ind = -1;
+		for (int i = 0; i < M; i++) if (v[i]) {
+			if (vals[i].has_value())
+				v ^= basis[i], cur ^= which[i];
+			else if (ind < 0) ind = i;
+		}
 		if (ind < 0) return false;
 		basis[ind] = v, vals[ind] = x;
 		which[ind] = cur, which[ind][ind] = 1;
 		return true;
 	}
-
 	vector<T> get(B v) const {
 		if (v.none()) return {{}};
 		B w;
 		for (int i = 0; i < M; i++)
-			if (v[i])
-				v ^= basis[i], w ^= which[i];
+			if (v[i]) v ^= basis[i], w ^= which[i];
 		if (v.any()) return {};
 
 		vector<T> res;
