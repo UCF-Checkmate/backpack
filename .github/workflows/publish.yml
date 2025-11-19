@@ -68,8 +68,7 @@ jobs:
         gh release edit latest \
           --title "Release ${{ steps.last_release.outputs.date }}" \
           --tag ${{ steps.last_release.outputs.date }} \
-          --draft=false \
-          --verify-tag
+          --draft=false
 
         git tag --delete latest
         git push origin :refs/tags/latest
