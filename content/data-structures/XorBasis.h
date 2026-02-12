@@ -14,19 +14,19 @@ const int M = 64;
 using B = bitset<M>;
 
 template<class T> struct Basis {
-	B basis[M], which[M];
-	optional<T> vals[M];
-	Basis() { memset(vals, 0, sizeof(vals)); }
+	B basis[M], which[M], has_val;
+	T val[M];
+	Basis() { memset(val, 0, sizeof(val)); }
 	bool add(B v, T x) {
 		if (v.none()) return false;
 		B cur; int ind = -1;
 		for (int i = 0; i < M; i++) if (v[i]) {
-			if (vals[i].has_value())
+			if (has_val[i])
 				v ^= basis[i], cur ^= which[i];
 			else if (ind < 0) ind = i;
 		}
 		if (ind < 0) return false;
-		basis[ind] = v, vals[ind] = x;
+		basis[ind] = v, val[ind] = x, has_val[ind] = 1;
 		which[ind] = cur, which[ind][ind] = 1;
 		return true;
 	}
@@ -39,7 +39,7 @@ template<class T> struct Basis {
 
 		vector<T> res;
 		for (int i = 0; i < M; i++)
-			if (w[i]) res.push_back(*vals[i]);
+			if (w[i]) res.push_back(val[i]);
 		return res;
 	}
 };
