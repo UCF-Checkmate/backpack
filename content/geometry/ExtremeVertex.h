@@ -3,7 +3,7 @@
  * Date: 2019-05-07
  * License: Boost Software License
  * Source: https://github.com/AlCash07/ACTL/blob/master/include/actl/geometry/algorithm/intersect/line_convex_polygon.hpp
- * Description: returns the point of a hull with the max projection onto a line.
+ * Description: Returns the point on a convex hull that is furthest along a given direction vector.
  * Time: O(\log n)
  * Status: stress-tested
  */
