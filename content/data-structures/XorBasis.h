@@ -20,7 +20,7 @@ template<class T> struct Basis {
 	bool add(B v, T x) {
 		if (v.none()) return false;
 		B cur; int ind = -1;
-		for (int i = 0; i < M; i++) if (v[i]) {
+		for (int i = M - 1; i >= 0; i--) if (v[i]) {
 			if (has_val[i])
 				v ^= basis[i], cur ^= which[i];
 			else if (ind < 0) ind = i;
